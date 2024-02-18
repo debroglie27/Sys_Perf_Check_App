@@ -667,3 +667,12 @@ def get_html(filename):
 
 def run_flask_app():
     app.run(host='0.0.0.0',port=RESULT_PORT)
+
+def cleanup(*args):
+    import sys,subprocess,os
+    os.chdir("/app")
+    subprocess.run(["rm","-r",str(img_test_id)])
+    subprocess.run(["rm","-r",str(img_test_id)+".tar.gz"])
+    sys.exit(0)
+import signal
+signal.signal(signal.SIGINT, cleanup)
