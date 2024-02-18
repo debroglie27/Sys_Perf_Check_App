@@ -1,5 +1,4 @@
 #!/usr/bin/python3
-import os
 from client_end_script_helper import (
     command_line_args,
     generate_test_id,

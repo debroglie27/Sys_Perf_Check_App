@@ -1,18 +1,27 @@
-import os,json,metrohash,subprocess,argparse,csv,re,socket,csv,tkinter as tk
+import os,json,subprocess,argparse,csv,re,socket,csv,tkinter as tk
 from datetime import datetime
 from ftplib import FTP
 from configparser import ConfigParser
-import pandas as pd
-import matplotlib.pyplot as plt
 from tkinter import ttk
-from PIL import ImageTk, Image
 from math import ceil
 from time import sleep
 
-log_host="10.129.7.11"
-test_host="https://safev2.cse.iitb.ac.in/"
-CPU_HOST ="10.129.7.11"
-HTTP_PORT="5002"
+# external modules
+# locust is also there
+import metrohash
+import pandas as pd
+import matplotlib.pyplot as plt
+from PIL import ImageTk, Image
+
+# test configuration
+from config import LOG_HOST,CPU_HOST,HTTP_PORT,SERVER_DAEMON_PORT,FTP_SERVER_PORT,SEARCH_LINES_LIMIT
+# LOG_HOST="10.129.7.11"
+# TEST_SERVER_HOST="https://safev2.cse.iitb.ac.in/"
+# CPU_HOST ="10.129.7.11"
+# HTTP_PORT=5002
+# SERVER_DAEMON_PORT=5000
+# FTP_SERVER_PORT=5001
+# SEARCH_LINES_LIMIT=200000
 
 def get_util_list(num):
     lst=[]
@@ -80,6 +89,14 @@ def generate_test_id():
     test_id=str(metrohash.metrohash64(hash_input).hex())
     return test_id
 
+# def generate_test_id():
+#     now=datetime.now()
+#     custom_format = "%Y-%m-%d_%H-%M-%S"
+#     test_id = now.strftime(custom_format)
+#     return test_id
+
+
+
 def create_test_directory(test_id):
     current_dir = os.getcwd()
     make_dir=["mkdir",f"{test_id}"]
@@ -91,7 +108,7 @@ def get_cpu_files(lower,upper,step):
     os.chdir("cpu_utilization")
     for users in range(lower,upper+1,step):
         file_name=str(users)+"_users"+".txt"
-        file_address="http://"+CPU_HOST+":"+HTTP_PORT+"/"+file_name
+        file_address="http://"+CPU_HOST+":"+str(HTTP_PORT)+"/"+file_name
         get_file=["curl",file_address]
         response = subprocess.run(get_file,capture_output=True,text=True)
         print("hit")
@@ -139,9 +156,10 @@ def command_line_args():
     parser.add_argument('-t',metavar="RUN_TIME",default=60,type=int,help='Specify the runtime for each user number being tested')
     args = parser.parse_args()
     return args.l,args.u,args.s,args.t
+
 def get_server_logs(test_id):
-    num_lines_extract=200000 # change this in the future
-    client_run(test_id,log_host,num_lines_extract)
+    num_lines_extract=SEARCH_LINES_LIMIT# change this in the future
+    client_run(test_id,LOG_HOST,num_lines_extract)
     extract_file = str(test_id)+ ".tar.gz"
     subprocess.run(["tar","-xvzf",extract_file])
     subprocess.run(['cp','components.json',test_id])
@@ -242,7 +260,7 @@ def client_run(testName,logHost,numLinesExtract):
     print(FTPServerStatus)
 
 def send_client_status_no_receive(host,message):
-    port = 5000  # socket server port number
+    port = SERVER_DAEMON_PORT  # socket server port number
 
     client_socket = socket.socket()  # instantiate
     client_socket.connect((host, port))  # connect to the server
@@ -252,7 +270,7 @@ def send_client_status_no_receive(host,message):
     client_socket.send(message.encode())  # send message
 
 def send_client_status(host,message):
-    port = 5000  # socket server port number
+    port = SERVER_DAEMON_PORT# socket server port number
 
     client_socket = socket.socket()  # instantiate
     client_socket.connect((host, port))  # connect to the server
@@ -269,7 +287,7 @@ def send_client_status(host,message):
     #     exit(1)
 
 def ftp_client(host,testName):
-    port=5001
+    port=FTP_SERVER_PORT
     fileName = testName+".tar.gz"
     ftp = FTP()
     ftp.connect(host,port)

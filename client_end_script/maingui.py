@@ -2,13 +2,23 @@ import webbrowser
 import json
 import os
 import pandas as pd
+from flask import Flask, send_file
+from config import RESULT_PORT
+global img_test_id
+app = Flask(__name__)
+
+
 def open_html_file(file_path):
     try:
         webbrowser.open(file_path)
     except Exception as e:
         print(f"Error: {e}")
+
+
 def showgui(testid):
     #creation of main html
+    global img_test_id
+    img_test_id = testid
     main="""<!doctype html>
 <html lang="en">
 
@@ -582,5 +592,78 @@ def showgui(testid):
     
     print("third file write completed")
     #launching of webbrowser
-    html_file_path = 'index.html'
-    open_html_file(html_file_path)
+    # html_file_path = 'index.html'
+    # open_html_file(html_file_path)
+    print(start)
+    print(start2)
+    print(start3)
+    run_flask_app()
+
+@app.route('/')
+def results():
+    try:
+        with open('index.html', 'r') as file:
+            contents = file.read()
+            print("read worked")
+            return contents
+    except FileNotFoundError:
+        return "File not found."
+    except Exception as e:
+        return f"An error occurred: {e}"
+
+# @app.route('/index2.html')
+# def results2():
+#     try:
+#         with open('index2.html', 'r') as file:
+#             contents = file.read()
+#             print("read worked")
+#             image_path = str(img_test_id)+".png"
+#             return contents
+#             return send_file(image_path, mimetype='image/jpg') + contents
+#     except FileNotFoundError:
+#         return "File not found."
+#     except Exception as e:
+#         return f"An error occurred: {e}"
+
+# @app.route('/index3.html')
+# def results3():
+#     try:
+#         with open('index3.html', 'r') as file:
+#             contents = file.read()
+#             image_path = str(img_test_id)+"cpu.png"
+#             print("read worked")
+#             return contents
+#             return send_file(image_path, mimetype='image/jpg') + contents
+#     except FileNotFoundError:
+#         return "File not found."
+#     except Exception as e:
+#         return f"An error occurred: {e}"
+
+# @app.route('/index4.html')
+# def results4():
+#     try:
+#         with open('index4.html', 'r') as file:
+#             contents = file.read()
+#             return contents
+#     except FileNotFoundError:
+#         return "File not found."
+#     except Exception as e:
+#         return f"An error occurred: {e}"
+
+@app.route('/<filename>.png')
+def get_image(filename):
+    # Assuming 'filename' corresponds to a valid image file path
+    filename = img_test_id+"/"+filename +".png"
+
+    return send_file(str(filename), mimetype='image/png')
+
+# Route for handling HTML filenames
+@app.route('/<filename>.html')
+def get_html(filename):
+    # Assuming 'filename' corresponds to a valid HTML file path
+    with open(str(filename)+".html", 'r') as file:
+        content = file.read()
+    return content
+
+def run_flask_app():
+    app.run(host='0.0.0.0',port=RESULT_PORT)
