@@ -128,8 +128,8 @@ def serverLogExtraction():
         msg_lst = data.split(",") 
 
         # Extract logs and fork an ftp-server
+        global childid
         if msg_lst[0] == "ExtractLogs":
-            global childid
             childid=os.fork()
             if childid==0:
                 FTPthread()
@@ -139,7 +139,6 @@ def serverLogExtraction():
             print(data)
             conn.send(data.encode()) 
         elif msg_lst[0] == "ExtractLogsNew":
-            global childid
             childid=os.fork()
             if childid==0:
                 FTPthread()
