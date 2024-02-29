@@ -78,7 +78,7 @@ def sys_perf_check_end_point(request,test_id,numuser):
 ```
 # requires a components.json file
 # run the below script on the server where you are hosting your project and want to measure its performance
-python3 server_end_script.py
+$ python3 server_end_script.py
 ```
 
 ### Running the cliend_end_script
