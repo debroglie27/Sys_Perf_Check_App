@@ -5,7 +5,7 @@
 * It is possible that you might have a component in backend that is choking the system at a certain load
 * sys_perf_check helps us detect such a component
 * e.g. of a such a system is shown below
-<!-- example image here -->
+![example_backend_components](https://drive.google.com/file/d/1rlnRLOiRZ58If5Az3ViDc5pVPQRR4QGi/view?usp=sharing "Backend with multiple components")
 * the tool itself is composed of two components the client_end_script and server_end_script
 * for a brief idea of sys_perf_check refer this link and for a detailed one refer this link
 
@@ -56,8 +56,7 @@ HTTP_PORT=5002
 ```
 
 ### Registering sys_perf_check endpoint
-* make sure to register the following api end point in your web application
-* path -> <host_name>/sys_perf_check/<num_users>
+* make sure to register the below code as an api end point in your web application at path: <host_name>/sys_perf_check/<num_users>
 * e.g for python shown below
 ```
 # a loop that uses cpu for 10 ms
@@ -91,9 +90,9 @@ $ docker build -t <image_name>
 
 #### Run the script using the docker container
 ```
-$ docker run --rm -p 5500:5500 -v $(pwd):/app <image_name> python3 client_end_script.py -l <start_load> -u <end_load> -s <step_size> -t <duration>
+$ docker run --rm -p <result_port>:5500 -v $(pwd):/app <image_name> python3 client_end_script.py -l <start_load> -u <end_load> -s <step_size> -t <duration>
 ```
 
 ### Results
-* they will be available at port 5500
+* they will be available at <result_port> and can be seen in the browser
 * e.g. image of result shown below
