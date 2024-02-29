@@ -7,7 +7,7 @@
 * e.g. of a such a system is shown below
 ![example_backend_components](resources/example_components_backend.png "Backend with multiple components")
 * the tool itself is composed of two components the client_end_script and server_end_script
-* for a brief idea of sys_perf_check refer this [link](resources/brief.pptx) and for a detailed one refer this [link](resources/detailed.pptx)
+* for a brief idea of sys_perf_check refer this [link](https://docs.google.com/presentation/d/1dgXD3k_f52C0bmGurdTR6MTLKg2qV0Mq/edit?usp=sharing&ouid=113201880241968556669&rtpof=true&sd=true "brief") and for a detailed one refer this [link](https://docs.google.com/presentation/d/1beYn7V-CGvDrLxl3yLiZ6nC4Fc5ns8Bi/edit?usp=sharing&ouid=113201880241968556669&rtpof=true&sd=true "detailed"), use slideshow while viewing.
 
 ## Initial Setup
 ### Configuring hosts and ports
