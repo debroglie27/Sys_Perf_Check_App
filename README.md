@@ -5,9 +5,9 @@
 * It is possible that you might have a component in backend that is choking the system at a certain load
 * sys_perf_check helps us detect such a component
 * e.g. of a such a system is shown below
-![example_backend_components](https://github.com/jatin-jatin/sys_perf_check_with_cpu_utilization/blob/main/resources/example_components_backend.png "Backend with multiple components")
+![example_backend_components](resources/example_components_backend.png "Backend with multiple components")
 * the tool itself is composed of two components the client_end_script and server_end_script
-* for a brief idea of sys_perf_check refer this link and for a detailed one refer this link
+* for a brief idea of sys_perf_check refer this [link](resources/brief.pptx) and for a detailed one refer this [link](resources/detailed.pptx)
 
 ## Initial Setup
 ### Configuring hosts and ports
