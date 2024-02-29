@@ -96,3 +96,6 @@ $ docker run --rm -p <result_port>:5500 -v $(pwd):/app <image_name> python3 clie
 ### Results
 * they will be available at <result_port> and can be seen in the browser
 * e.g. image of result shown below
+![result_home](resources/result_home.png "result homepage")
+![result_response_time](resources/result_response_time.png "response time vs num of users")
+![result_cpu](resources/result_cpu.png "cpu utilization vs num of users")
