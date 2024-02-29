@@ -56,7 +56,7 @@ HTTP_PORT=5002
 ```
 
 ### Registering sys_perf_check endpoint
-* make sure to register the below code as an api end point in your web application at path: <host_name>/sys_perf_check/<num_users>
+* make sure to register the below code as an api end point in your web application at path: <host_name>/sys_perf_check/<test-id>/<num_users>
 * e.g for python shown below
 ```
 # a loop that uses cpu for 10 ms
@@ -68,6 +68,15 @@ def sys_perf_check_end_point(request,test_id,numuser):
     z=timeit.default_timer()
     res=(z-x)*1000
     return HttpResponse("the time taken to execute the test "+test_id+" for id is "+str(res)+" miliseconds for the number of user "+numuser)
+```
+
+### Logs
+* turn on the logs for each component mentioned in components.json
+* make sure the response time should be like \*\*\*<response_time>\*\*\* in logs
+* request should be displayed like /sys_perf_check/<test-id>/<response-time>
+* e.g. logs shown belos
+```
+[24/Jul/2023:13:52:10 +0530] GET /sys_perf_check/0a0f8d235d819a03/20/ HTTP/1.0***0.024***
 ```
 
 ## Running the tool
