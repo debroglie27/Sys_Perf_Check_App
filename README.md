@@ -74,7 +74,7 @@ def sys_perf_check_end_point(request,test_id,numuser):
 ### Logs
 * turn on the logs for each component mentioned in components.json
 * make sure the response time should be like \*\*\*<response_time>\*\*\* in logs
-* request should be displayed like /sys_perf_check/<test-id>/<response-time>
+* request should be displayed like /sys_perf_check/<test_id>/<response_time>
 * e.g. logs shown below
 ```
 [24/Jul/2023:13:52:10 +0530] GET /sys_perf_check/0a0f8d235d819a03/20/ HTTP/1.0***0.024***
