@@ -38,6 +38,7 @@ HTTP_PORT=5002
 
 ### components.json
 * Need to define a components.json file that will be used by both the client_end_script and server_end_script
+* you can specify **componentName** to be anything, **logPath** should point to location of logs and **timeUnit** can be **s,ms or micros**.
 * e.g. of the components.json is shown below
 ```
 [
