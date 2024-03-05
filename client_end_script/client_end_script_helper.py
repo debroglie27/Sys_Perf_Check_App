@@ -178,6 +178,71 @@ def read_config():
     config_data = config["test"]
     return config_data["test-id"],config_data["num-of-users"]
 
+# def extract_time(id_pattern,file_name,timeUnit):
+#     s=file_name.split(".")
+#     head=['Numusers','Averagetime']
+#     head1=['Responsetime']
+#     data=[]
+#     data1=[]
+#     outfile=s[0]+"restime.csv"
+#     outputfile=s[0]+".csv"
+#     print(outputfile)
+#     only_id_pattern=re.compile(id_pattern)
+#     id_pattern="/"+id_pattern+"/"+"[0-9]+"
+#     num_users_pattern = re.compile(id_pattern)
+#     response_time_pattern = re.compile("\*\*\*.*\*\*\*")
+#     current_users=-1
+#     with open(file_name) as file_h:
+#         count=0
+#         time=0
+#         for line in file_h:
+#             try:
+#                 if line.strip()!="":
+#                     users=int(num_users_pattern.search(line).group(0)[18:])
+#                     if current_users==-1:
+#                         current_users=users
+#                     if current_users!=users:
+#                         avg_time=time/count
+#                         #print(str(current_users)+","+str(avg_time))
+#                         if (timeUnit=="s"):
+#                             avg_time=avg_time*1000
+#                             avg_time = round(avg_time,2)
+#                             data.append([str(current_users),str(avg_time)])
+#                         else:
+#                             avg_time = round(avg_time,2)
+#                             data.append([str(current_users),str(avg_time)])
+#                         current_users=users
+#                         count=0
+#                         time=0
+#                     response_time=float(response_time_pattern.search(line).group(0)[3:][:-3])
+#                     if (timeUnit=="s"):
+#                         data1.append([str(response_time*1000)])
+#                     else:
+#                         data1.append([str(response_time)])
+#                     count+=1
+#                     time+=response_time
+#             except AttributeError :
+#                 if only_id_pattern.search(line) == None:
+#                     print(line)
+#                     print("AttributeError")
+#                     exit(1)
+#         avg_time=time/count
+#         if (timeUnit=="s"):
+#             avg_time=avg_time*1000
+#             avg_time = round(avg_time,2)
+#             data.append([str(current_users),str(avg_time)])
+#         else:
+#             avg_time = round(avg_time,2)
+#             data.append([str(current_users),str(avg_time)])
+#     with open(outfile, 'w') as csvfile:
+#         csvwriter = csv.writer(csvfile) 
+#         csvwriter.writerow(head1) 
+#         csvwriter.writerows(data1)
+#     with open(outputfile, 'w') as csvfile:
+#         csvwriter = csv.writer(csvfile) 
+#         csvwriter.writerow(head) 
+#         csvwriter.writerows(data)
+
 def extract_time(id_pattern,file_name,timeUnit):
     s=file_name.split(".")
     head=['Numusers','Averagetime']
@@ -193,47 +258,51 @@ def extract_time(id_pattern,file_name,timeUnit):
     response_time_pattern = re.compile("\*\*\*.*\*\*\*")
     current_users=-1
     with open(file_name) as file_h:
-        count=0
-        time=0
+        # count=0
+        # time=0
+        x=dict()
+        y=dict()
         for line in file_h:
             try:
                 if line.strip()!="":
                     users=int(num_users_pattern.search(line).group(0)[18:])
-                    if current_users==-1:
-                        current_users=users
-                    if current_users!=users:
-                        avg_time=time/count
-                        #print(str(current_users)+","+str(avg_time))
-                        if (timeUnit=="s"):
-                            avg_time=avg_time*1000
-                            avg_time = round(avg_time,2)
-                            data.append([str(current_users),str(avg_time)])
-                        else:
-                            avg_time = round(avg_time,2)
-                            data.append([str(current_users),str(avg_time)])
-                        current_users=users
-                        count=0
-                        time=0
                     response_time=float(response_time_pattern.search(line).group(0)[3:][:-3])
-                    if (timeUnit=="s"):
-                        data1.append([str(response_time*1000)])
+                    if users not in x:
+                        if(timeUnit=="s"):
+                            x[users]=(response_time*1000)
+                            y[users]=1
+                            data1.append([str(response_time*1000)])
+                        elif(timeUnit=="micros"):
+                            x[users]=(response_time/1000)
+                            y[users]=1
+                            data1.append([str(response_time/1000)])
+                        else:
+                            x[users]=(response_time)
+                            y[users]=1
+                            data1.append([str(response_time)])
                     else:
-                        data1.append([str(response_time)])
-                    count+=1
-                    time+=response_time
+                        if(timeUnit=="s"):
+                            x[users]+=(response_time*1000)
+                            y[users]+=1
+                            data1.append([str(response_time*1000)])
+                        elif(timeUnit=="micros"):
+                            x[users]+=(response_time/1000)
+                            y[users]+=1
+                            data1.append([str(response_time/1000)])
+                        else:
+                            x[users]+=(response_time)
+                            y[users]+=1
+                            data1.append([str(response_time)])
             except AttributeError :
                 if only_id_pattern.search(line) == None:
                     print(line)
                     print("AttributeError")
                     exit(1)
-        avg_time=time/count
-        if (timeUnit=="s"):
-            avg_time=avg_time*1000
+                    
+        for cur in x:
+            avg_time=x[cur]/y[cur]
             avg_time = round(avg_time,2)
-            data.append([str(current_users),str(avg_time)])
-        else:
-            avg_time = round(avg_time,2)
-            data.append([str(current_users),str(avg_time)])
+            data.append([str(cur),str(avg_time)])
     with open(outfile, 'w') as csvfile:
         csvwriter = csv.writer(csvfile) 
         csvwriter.writerow(head1) 
@@ -242,6 +311,7 @@ def extract_time(id_pattern,file_name,timeUnit):
         csvwriter = csv.writer(csvfile) 
         csvwriter.writerow(head) 
         csvwriter.writerows(data)
+
 
 def client_run(testName,logHost,numLinesExtract):
     message = ["ExtractLogs",testName,str(numLinesExtract)]
