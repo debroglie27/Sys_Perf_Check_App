@@ -56,7 +56,7 @@ HTTP_PORT=5002
 ```
 
 ### Registering sys_perf_check endpoint
-* make sure to register the below code as an api end point in your web application at path: <host_name>/sys_perf_check/<test-id>/<num_users>
+* make sure to register the below code as an api end point in your web application at path: <host_name>/sys_perf_check/<test_id>/<num_users>
 * e.g for python shown below
 ```
 # a loop that uses cpu for 10 ms
