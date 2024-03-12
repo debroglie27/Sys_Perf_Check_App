@@ -70,6 +70,7 @@ def sys_perf_check_end_point(request,test_id,numuser):
     res=(z-x)*1000
     return HttpResponse("the time taken to execute the test "+test_id+" for id is "+str(res)+" miliseconds for the number of user "+numuser)
 ```
+**NOTE For SAFE team** : An example of sys_perf_check endpoint is available for use in the **SAFE_with_sys_perf_check** branch.
 
 ### Logs
 * turn on the logs for each component mentioned in components.json
