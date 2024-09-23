@@ -7,7 +7,6 @@ from math import ceil
 from time import sleep
 
 # external modules
-# locust is also there
 import metrohash
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -15,13 +14,7 @@ from PIL import ImageTk, Image
 
 # test configuration
 from config import LOG_HOST,CPU_HOST,HTTP_PORT,SERVER_DAEMON_PORT,FTP_SERVER_PORT,SEARCH_LINES_LIMIT
-# LOG_HOST="10.129.7.11"
-# TEST_SERVER_HOST="https://safev2.cse.iitb.ac.in/"
-# CPU_HOST ="10.129.7.11"
-# HTTP_PORT=5002
-# SERVER_DAEMON_PORT=5000
-# FTP_SERVER_PORT=5001
-# SEARCH_LINES_LIMIT=200000
+
 
 def get_util_list(num):
     lst=[]
@@ -88,13 +81,6 @@ def generate_test_id():
     hash_input=str(datetime.now()).encode('utf-8')
     test_id=str(metrohash.metrohash64(hash_input).hex())
     return test_id
-
-# def generate_test_id():
-#     now=datetime.now()
-#     custom_format = "%Y-%m-%d_%H-%M-%S"
-#     test_id = now.strftime(custom_format)
-#     return test_id
-
 
 
 def create_test_directory(test_id):
@@ -172,76 +158,13 @@ def write_config(test_id,num_users):
     }
     with open("test.ini","w+") as f:
         config.write(f)
+
 def read_config():
     config=ConfigParser()
     config.read("test.ini")
     config_data = config["test"]
     return config_data["test-id"],config_data["num-of-users"]
 
-# def extract_time(id_pattern,file_name,timeUnit):
-#     s=file_name.split(".")
-#     head=['Numusers','Averagetime']
-#     head1=['Responsetime']
-#     data=[]
-#     data1=[]
-#     outfile=s[0]+"restime.csv"
-#     outputfile=s[0]+".csv"
-#     print(outputfile)
-#     only_id_pattern=re.compile(id_pattern)
-#     id_pattern="/"+id_pattern+"/"+"[0-9]+"
-#     num_users_pattern = re.compile(id_pattern)
-#     response_time_pattern = re.compile("\*\*\*.*\*\*\*")
-#     current_users=-1
-#     with open(file_name) as file_h:
-#         count=0
-#         time=0
-#         for line in file_h:
-#             try:
-#                 if line.strip()!="":
-#                     users=int(num_users_pattern.search(line).group(0)[18:])
-#                     if current_users==-1:
-#                         current_users=users
-#                     if current_users!=users:
-#                         avg_time=time/count
-#                         #print(str(current_users)+","+str(avg_time))
-#                         if (timeUnit=="s"):
-#                             avg_time=avg_time*1000
-#                             avg_time = round(avg_time,2)
-#                             data.append([str(current_users),str(avg_time)])
-#                         else:
-#                             avg_time = round(avg_time,2)
-#                             data.append([str(current_users),str(avg_time)])
-#                         current_users=users
-#                         count=0
-#                         time=0
-#                     response_time=float(response_time_pattern.search(line).group(0)[3:][:-3])
-#                     if (timeUnit=="s"):
-#                         data1.append([str(response_time*1000)])
-#                     else:
-#                         data1.append([str(response_time)])
-#                     count+=1
-#                     time+=response_time
-#             except AttributeError :
-#                 if only_id_pattern.search(line) == None:
-#                     print(line)
-#                     print("AttributeError")
-#                     exit(1)
-#         avg_time=time/count
-#         if (timeUnit=="s"):
-#             avg_time=avg_time*1000
-#             avg_time = round(avg_time,2)
-#             data.append([str(current_users),str(avg_time)])
-#         else:
-#             avg_time = round(avg_time,2)
-#             data.append([str(current_users),str(avg_time)])
-#     with open(outfile, 'w') as csvfile:
-#         csvwriter = csv.writer(csvfile) 
-#         csvwriter.writerow(head1) 
-#         csvwriter.writerows(data1)
-#     with open(outputfile, 'w') as csvfile:
-#         csvwriter = csv.writer(csvfile) 
-#         csvwriter.writerow(head) 
-#         csvwriter.writerows(data)
 
 def extract_time(id_pattern,file_name,timeUnit):
     s=file_name.split(".")
@@ -258,8 +181,6 @@ def extract_time(id_pattern,file_name,timeUnit):
     response_time_pattern = re.compile("\*\*\*.*\*\*\*")
     current_users=-1
     with open(file_name) as file_h:
-        # count=0
-        # time=0
         x=dict()
         y=dict()
         for line in file_h:
@@ -352,9 +273,7 @@ def send_client_status(host,message):
     data = client_socket.recv(1024).decode()  # receive response
     client_socket.close()  # close the connection
     return data
-    # else:
-    #     print("No message Received at client check for errors")
-    #     exit(1)
+
 
 def ftp_client(host,testName):
     port=FTP_SERVER_PORT
@@ -418,22 +337,14 @@ def showgui(test_id):
     # Configure the Canvas to use the Scrollbar
     canvas.configure(yscrollcommand=scrollbar.set)
 
-
     # Create a Frame inside the Canvas to hold the content
-
-
-
-
     frame = tk.Frame(canvas,bg=background_color,bd=10)
 
-
     canvas.create_window((0,0), window=frame, anchor=tk.NW,width=1835)
-
 
     heading_label = tk.Label(frame, text="Image and Table Presentation", font=("Arial", 40, "bold"), fg="black",bg=background_color)
     heading_label.pack()
     heading_label.pack(pady=10)
-
 
     image = Image.open(result)
     image = image.resize((800, 600))  # Resize the image if needed
@@ -445,12 +356,9 @@ def showgui(test_id):
     image_label.pack()
     image_label.pack(pady=10)
 
-
-
     heading_label1 = tk.Label(frame, text="Table containing Response Time(ms) vs number of users ", font=("Arial", 40, "bold"), fg="black",bg=background_color)
     heading_label1.pack()
     heading_label1.pack(pady=10,padx=30)
-
 
     # merging the csv files# Read the CSV files into DataFrames
     columns=["Numusers"]
