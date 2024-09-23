@@ -1,1 +1,1 @@
-docker run --rm -p 5500:5500 -v $(pwd):/app client_end_demo_image python3 client_end_script.py -l 50 -u 60 -s 10 -t 30
+sudo docker run --rm -p 5500:5500 -v $(pwd):/app sys_perf_check_app python3 client_end_script.py -l 10 -u 100 -s 10 -t 50

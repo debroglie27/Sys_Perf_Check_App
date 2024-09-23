@@ -15,9 +15,9 @@ class PerfCheck(SequentialTaskSet):
             # print("perf_check:",response.text)
             print(response)
 
-    @task
-    def on_stop(self):
-        raise StopUser()
+    # @task
+    # def on_stop(self):
+    #     raise StopUser()
 
 
 class MySeqTest(HttpUser):
